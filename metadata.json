@@ -1,0 +1,6 @@
+{
+  "name": "Form Lembur SPKL",
+  "description": "Aplikasi Surat Perintah Kerja Lembur (SPKL) lengkap dengan cetak langsung PrintManager, pratinjau PDF, tanda tangan digital, manajemen berkas terenkripsi, sinkronisasi awan, dan ekspor kalender.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

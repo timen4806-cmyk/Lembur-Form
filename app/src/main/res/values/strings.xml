@@ -1,0 +1,15 @@
+<resources>
+    <string name="app_name">Form Lembur SPKL</string>
+    <string name="title_form_lembur">FORM LEMBUR KARYAWAN</string>
+    <string name="subtitle_spkl">SURAT PERINTAH KERJA LEMBUR (SPKL)</string>
+    <string name="section_employee_data">DATA KARYAWAN</string>
+    <string name="section_overtime_detail">DETAIL TABEL LEMBUR</string>
+    <string name="section_signatures">TANDA TANGAN &amp; PENGESAHAN</string>
+    <string name="section_print_options">OPSI CETAK &amp; EKSPOR</string>
+    <string name="btn_print_pdf">CETAK LANGSUNG (PRINTER)</string>
+    <string name="btn_preview_pdf">PRATINJAU DOKUMEN</string>
+    <string name="btn_save_pdf">SIMPAN SEBAGAI PDF</string>
+    <string name="btn_clear_signatures">HAPUS SEMUA TTD</string>
+    <string name="btn_export_cloud">EKSPOR KE CLOUD</string>
+    <string name="btn_sync_calendar">SINKRONKAN KE KALENDER</string>
+</resources>
