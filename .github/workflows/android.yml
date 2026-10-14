@@ -7,6 +7,9 @@ on:
     branches: [ "**" ]
   workflow_dispatch:
 
+permissions:
+  contents: write
+
 jobs:
   build:
     name: Build APK (Debug & Release)
@@ -82,16 +85,45 @@ jobs:
         run: |
           ./gradlew assembleDebug assembleRelease --stacktrace
 
+      - name: Copy APK to Root for Direct Export
+        run: |
+          mkdir -p apks
+          cp app/build/outputs/apk/release/*.apk apks/app-release.apk
+          cp app/build/outputs/apk/debug/*.apk apks/app-debug.apk
+          echo "### 📱 Hasil Kompilasi APK Siap Diunduh:" >> $GITHUB_STEP_SUMMARY
+          echo "- **Release APK:** \`app-release.apk\` (Bisa diunduh dari menu Artifacts atau Releases)" >> $GITHUB_STEP_SUMMARY
+          echo "- **Debug APK:** \`app-debug.apk\`" >> $GITHUB_STEP_SUMMARY
+
       - name: Upload Debug APK Artifact
         uses: actions/upload-artifact@v4
         with:
           name: app-debug
-          path: app/build/outputs/apk/debug/*.apk
-          retention-days: 14
+          path: apks/app-debug.apk
+          retention-days: 30
 
       - name: Upload Release APK Artifact
         uses: actions/upload-artifact@v4
         with:
           name: app-release
-          path: app/build/outputs/apk/release/*.apk
-          retention-days: 14
+          path: apks/app-release.apk
+          retention-days: 30
+
+      - name: Publish Direct APK Download to GitHub Releases
+        if: github.event_name == 'push' || github.event_name == 'workflow_dispatch'
+        uses: softprops/action-gh-release@v2
+        continue-on-error: true
+        with:
+          tag_name: "v1.0.0-build${{ github.run_number }}"
+          name: "Form Lembur SPKL - Build #${{ github.run_number }}"
+          body: |
+            ## 📥 Unduh File APK Langsung:
+            Klik tautan berkas di bawah ini untuk langsung mengunduh ke ponsel Android Anda:
+            - **[Unduh app-release.apk](https://github.com/${{ github.repository }}/releases/download/v1.0.0-build${{ github.run_number }}/app-release.apk)** (Rekomendasi untuk dipasang di HP)
+            - **[Unduh app-debug.apk](https://github.com/${{ github.repository }}/releases/download/v1.0.0-build${{ github.run_number }}/app-debug.apk)**
+          draft: false
+          prerelease: false
+          files: |
+            apks/app-release.apk
+            apks/app-debug.apk
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
