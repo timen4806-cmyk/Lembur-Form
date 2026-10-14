@@ -110,20 +110,14 @@ jobs:
 
       - name: Publish Direct APK Download to GitHub Releases
         if: github.event_name == 'push' || github.event_name == 'workflow_dispatch'
-        uses: softprops/action-gh-release@v2
-        continue-on-error: true
-        with:
-          tag_name: "v1.0.0-build${{ github.run_number }}"
-          name: "Form Lembur SPKL - Build #${{ github.run_number }}"
-          body: |
-            ## 📥 Unduh File APK Langsung:
-            Klik tautan berkas di bawah ini untuk langsung mengunduh ke ponsel Android Anda:
-            - **[Unduh app-release.apk](https://github.com/${{ github.repository }}/releases/download/v1.0.0-build${{ github.run_number }}/app-release.apk)** (Rekomendasi untuk dipasang di HP)
-            - **[Unduh app-debug.apk](https://github.com/${{ github.repository }}/releases/download/v1.0.0-build${{ github.run_number }}/app-debug.apk)**
-          draft: false
-          prerelease: false
-          files: |
-            apks/app-release.apk
-            apks/app-debug.apk
+        run: |
+          TAG_NAME="v1.0.0-build${{ github.run_number }}"
+          echo "Membuat GitHub Release dengan tag: $TAG_NAME..."
+          gh release create "$TAG_NAME" apks/app-release.apk apks/app-debug.apk \
+            --title "Form Lembur SPKL - Build #${{ github.run_number }}" \
+            --notes "### 📥 File APK Siap Pasang (Download Langsung):
+          - **app-release.apk** (Rekomendasi untuk dipasang di HP Android)
+          - **app-debug.apk**" \
+            --latest || echo "Release pembuatan dilewati jika sudah ada."
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
